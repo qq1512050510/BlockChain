@@ -1,6 +1,6 @@
 # BlockChain
 solidity 教程 By Chiang
-#基础语法
+# 基础语法
 * 1、Version Pragma
 >Version Pragma定义代码使用的Solidity编译器版本的生命。
 ```
@@ -16,7 +16,7 @@ import "filename";
 >/*\
 >   多行注释\
 >*/
-##数据类型
+## 数据类型
 * address，ETH地址长度，20个字节
 * int/uint 变长的有符号或无符号整型。支持8倍递增，uint8到unit256，unit默认为unit256.
 * bool 布尔类型
