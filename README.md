@@ -38,11 +38,19 @@ import "filename";
 * 在Solidity v4.17之前，只有`constant`，由于constant也代表变量中常量的意思，所以constant拆成了view和pure
 * 当函数有返回值是，可以添加三种定义，用三种方式定义的函数都只执行那个读操作，不会进行编译执行。用这三种方式地难以的函数，不会执行函数里的逻辑，\
 只会执行一个返回的读操作。所以执行这些函数不需要消耗gas费用
-* pure则更为严格，pure修饰的函数不能改也不能读变量的状态，否则编译通不过。
 * view的作用和constant一模一样，可以读取状态变量，但是不能改变量。
+* pure则更为严格，pure修饰的函数不能改也不能读变量的状态，否则编译通不过。
+
 > ```
 > `FunctionTest`
 > ```
+补充：
+view与pure使用场景
+* view：可以自由调用，因为它只是“查看”区块链的状体而不改变它
+* pure：也可以自由调用，既不读取也不写入区块链。
+view与pure的原理（问题）
+* view：要读取区块链上的内容，为什么不消耗gas？
+* pure：不读取更不修改区块链上的变量，使本机的CPU资源计算我们的函数，所以不消耗任何资源。
 ### 函数修饰符
 * 修改器（Modifiers）可以用来轻易的改变一个函数的行为。比如用于在函数执行前检查某种前置条件。
 
@@ -77,4 +85,50 @@ address payable：可支付地址，与address相同，不过有成员函数tran
 表示当前合约，可以显式的转换为Address
 * selfdestruct(address recipient):
 销毁当前合约，并把它所有资金发送到给定的地址。
+Solidity语言的3种转币方法
+* 1.<address>.transfer()
+* 2.<address>.send()
+* 3.<address>.gas().call.value()
+>这三种方法都可以向某一地址发送ether
+Solidity语言3种转币方法的区别
+* 1.<address>.transfer()
+>当发生失败时会throw；回滚状态；
+>只会传递2300Gas供调用，防止重入攻击；
+* 2.<address>.send()
+>当发生失败时会返回false布尔值；
+>只会出传递2300Gas供调用，防止重入；
+* 3.<address>.gas().call.value()
+>当发生失败时会返回false布尔值；
+>传递所有可用Gas进行调用（可通过gas(gas_value)进行限制），不能有效防止重入。
+## 常用API
+* 1. block.blockhash(uint blockNumber) returns (bytes32)：返回给定区块号
+的哈希值，只支持最近256个区块，且不包含当前区块。
+* 2. block.coinbase(address): 当前块矿工的地址。
+* 3. block.difficulty(uint):当前块的难度。
+* 4. block.gaslimit(uint):当前块的gaslimit。
+* 5. block.number(uint):当前区块的块号。
+* 6. block.timestamp(uint): 当前块的Unix时间戳（从1970/1/1 00:00:00 UTC
+开始所经过的秒数）
+## 调用者相关
+* 1. msg.sender(address): 当前调用发起人的地址。
+* 2. msg.value(uint): 这个消息所附带的以太币，单位为wei。
+* 3. msg.sig(bytes4):调用数据(calldata)的前四个字节（例如为：函数标识符）。
+* 4. msg.data(bytes): 完整的调用数据（calldata）。
+* 5. tx.origin(address): 交易的发送者
+* 6. tx.gasprice(uint) : 交易的 gas 价格。
+* 7. now(uint): 当前块的时间戳 (block.timestamp 的别名)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
