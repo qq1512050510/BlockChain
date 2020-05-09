@@ -1,5 +1,5 @@
 # BlockChain
-solidity 教程 By Chiang
+solidity 教程 By JiangYP
 # 基础语法
 * 1、Version Pragma
 >Version Pragma定义代码使用的Solidity编译器版本的生命。
@@ -46,9 +46,35 @@ import "filename";
 ### 函数修饰符
 * 修改器（Modifiers）可以用来轻易的改变一个函数的行为。比如用于在函数执行前检查某种前置条件。
 
+### 构造函数
+构造函数是特殊的函数，在部署合约的时候，就会被调用。常常用于对某一些状态变量的初始化。
+>* 老版本的solidity编译器中，构造函数和合约的名字同名
+>* 新版本的solidity编译器中，使用关键字constructor作为构造函数
 ### 回退函数
 * fallback function回退函数，每一个合约有且仅有一个没有名字的函数，往合约发送消息时，会执行该函数。如果合约要正常接受ether，\
 需要加上payable声明。声明后，当有用户往合约转账时，将触发该函数，可以在里面写相应的逻辑。
 1. 当外部账户或其他合约向该合约地址发送ether时；
 2. 当外部账户或其他合约调用了该合约一个**不存在**的函数时。
 >CallbackFunction
+### 异常处理
+* 使用状态恢复来处理异常，就是说当抛出异常时将恢复到调用前的状态。抛出异常的方式有assert，require，revert，throw。
+>* assert函数，用于条件检查，只能检测内部错误和检查常量。
+>* require函数，也是条件检查，用于测试调用的输入或者合约状态变量。
+>* revert函数用于标记错误并恢复当前调用。
+>* throw和revert一样，但是throw在0.4.13被弃用，将来会淘汰。
+
+### 地址相关
+* 以太坊地址的长度大小是20个字节，使用uint160(8*20)来存储的，而且他们之间可以相互强制转换：
+````
+address payable ap = address(uint160(addr));
+````
+* 地址之间是可以直接比较大小：<=,<,>=,>,==,!=
+* 地址类型有两种形式，他们大致相同：
+address：保存一个20字节的值（以太坊地址的大小）。
+address payable：可支付地址，与address相同，不过有成员函数transfer和send。
+### 合约相关
+* this(当前合约的类型):
+表示当前合约，可以显式的转换为Address
+* selfdestruct(address recipient):
+销毁当前合约，并把它所有资金发送到给定的地址。
+
